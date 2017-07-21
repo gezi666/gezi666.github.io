@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>CSS print 样式 | 魏阁的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="显示器(screen)和打印机(printer)是两种差别很大的设备,所以从浏览器里看到的页面,打印出来也许和你看到的样子有很大的差距。screen一般使用逻辑单位比如px,而打印机则应该使用物理单位比如cm或in。我们常见的A4纸张大小在不同DPI的显示器上显示的大小是不同的。因此如果要精确的控制打印效果就应该使用print css，这是跨平台兼容的标准。 web打印还有一种解决方式是生成pd">
+<meta name="keywords" content="print">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS print 样式">
+<meta property="og:url" content="http://yoursite.com/2017/07/17/CSS prin/index.html">
+<meta property="og:site_name" content="魏阁的博客">
+<meta property="og:description" content="显示器(screen)和打印机(printer)是两种差别很大的设备,所以从浏览器里看到的页面,打印出来也许和你看到的样子有很大的差距。screen一般使用逻辑单位比如px,而打印机则应该使用物理单位比如cm或in。我们常见的A4纸张大小在不同DPI的显示器上显示的大小是不同的。因此如果要精确的控制打印效果就应该使用print css，这是跨平台兼容的标准。 web打印还有一种解决方式是生成pd">
+<meta property="og:updated_time" content="2017-07-21T05:22:30.761Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSS print 样式">
+<meta name="twitter:description" content="显示器(screen)和打印机(printer)是两种差别很大的设备,所以从浏览器里看到的页面,打印出来也许和你看到的样子有很大的差距。screen一般使用逻辑单位比如px,而打印机则应该使用物理单位比如cm或in。我们常见的A4纸张大小在不同DPI的显示器上显示的大小是不同的。因此如果要精确的控制打印效果就应该使用print css，这是跨平台兼容的标准。 web打印还有一种解决方式是生成pd">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">魏阁的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">文章</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-CSS prin" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/07/17/CSS prin/" class="article-date">
+  <time datetime="2017-07-16T16:00:00.000Z" itemprop="datePublished">2017-07-17</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CSS print 样式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>显示器(screen)和打印机(printer)是两种差别很大的设备,所以从浏览器里看到的页面,打印出来也许和你看到的样子有很大的差距。screen一般使用逻辑单位比如px,而打印机则应该使用物理单位比如cm或in。我们常见的A4纸张大小在不同DPI的显示器上显示的大小是不同的。因此如果要精确的控制打印效果就应该使用print css，这是跨平台兼容的标准。</p>
+<p>web打印还有一种解决方式是生成pdf格式文件,客户端下载来打印,这也是不错的一种打印方式,因为pdf本身就是一种打印标准,可以做到精确控制。可以使用<a href="https://parall.ax/products/jspdf" target="_blank" rel="external">jsPDF</a>在客户端动态生成pdf,也可以在服务器端使用一些组件生成pdf后传送给客户端。当然首选还是使用print css来实现打印。</p>
+<a id="more"></a>
+<h2 id="引入print-css"><a href="#引入print-css" class="headerlink" title="引入print css"></a>引入print css</h2><ul>
+<li>使用link标签就像通常在html页面中引入样式表一样,不过附加一个额外的media属性,如下面这样:<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"print.css"</span> media=<span class="string">"print"</span> /&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>表明print.css样式表是用于打印的</p>
+<ul>
+<li>使用@media规则可以在通用的样式表中,使用@media规则指定样式用于打印,比如这样:<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@media print selector &#123;</span></div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>或者</p>
+<ul>
+<li>css 代码:<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@media print &#123;</span></div><div class="line">    selector&#123;</div><div class="line">    ...</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>使用@import规则在通用的样式表中导入打印样式表,有两种形式,其本质是一样的。</p>
+<ul>
+<li><p>css 代码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@import url(print-style.css) print;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>html 代码:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;style type="text/css"&gt;</div><div class="line">    @import url(print-style.css) print;</div><div class="line">&lt;/style&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>使用link标签要比使用@import规则性能更好。</p>
+<h2 id="度量单位"><a href="#度量单位" class="headerlink" title="度量单位"></a>度量单位</h2><p>显示时一般使用px,em或pt等逻辑单位,但在打印时要使用物理单位,比如cm或in(英寸)。对于常见的DPI(Dot Per Inch)为96的screen,px与cm的换算关系如下：</p>
+<p>1 inch = 2.54 cm</p>
+<p>1cm = 96/2.54 ≈ 37.80 px</p>
+<p>1px = 2.54/96 ≈ 0.0265 cm</p>
+<p>100px = 2.65 cm</p>
+<p>A4纸的标准尺寸为:</p>
+<p>21.0cm * 29.7 cm</p>
+<p>在96DPI分辨率下,其对应的像素尺寸大约为:</p>
+<p>794px * 1123px</p>
+<p>因为不同的DPI下,其对应的像素尺寸是不同的,所以才要使用print css,使用物理单位来描述要打印的页面,这样打印效果就会一致了。</p>
+<h2 id="page规则-at-rule"><a href="#page规则-at-rule" class="headerlink" title="@page规则(at-rule)"></a>@page规则(at-rule)</h2><p>@page 规则用于指定打印页面的一些属性,包括纸张尺寸,方向,页边距,分页等特性。其语法如下:</p>
+<ul>
+<li>css 代码:<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@page :pseudo-class &#123;</span></div><div class="line">    size: A4 landscape;</div><div class="line">    margin:<span class="number">2</span>cm;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>其中伪类可以指定:</p>
+<ul>
+<li>page-break-before用于设置元素前面的分页行为,可取值:</li>
+<li>auto默认值。如果必要则在元素前插入分页符。</li>
+<li>always在元素前插入分页符。</li>
+<li>avoid避免在元素前插入分页符。</li>
+<li>left在元素之前足够的分页符，一直到一张空白的左页为止。</li>
+<li>right在元素之前足够的分页符，一直到一张空白的右页为止。</li>
+<li>inherit规定应该从父元素继承 page-break-before 属性的设置。</li>
+<li>page-break-after设置元素后的分页行为。取值与page-break-before一样。</li>
+<li>page-break-inside设置元素内部的分页行为。取值如下:</li>
+<li>auto默认。如果必要则在元素内部插入分页符。</li>
+<li>avoid避免在元素内部插入分页符。</li>
+<li>inherit规定应该从父元素继承 page-break-inside 属性的设置</li>
+</ul>
+<p>比如:</p>
+<ul>
+<li>css 代码:<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@media print &#123;</span></div><div class="line">    p &#123;orphans:<span class="number">3</span>; widows:<span class="number">2</span>;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>其他<br>1.对于页面上有显示而不想打印的内容,可以将其display设置为none来避免打印。<br>2.需要打印的内容尽量避免float,有些浏览器不会正确的打印浮动的内容。<br>3.可以调用window.print()函数来打印当前页面。<br>4.分页打印或换页打印：page- break-before和page-break-after CSS属性并不会修改网页在屏幕上的显示，这两个属性是用来控制文件的打印方式。每个打印属性都可以设定4种设定值：auto、always、left和 right。其中Auto是默认值，只有在有需要时，才需设定分页符号 (Page breaks)。page-break-before若设定成always，则是在遇到特定的组件时，打印机会重新开始一个新的打印页。page- break-before若设定成left，则会插入分页符号，直到指定的组件出现在一个左边的空白页上。page-break-before若设定成 right，则会插入分页符号，直到指定的组件出现在一个右边的空白页上。page-break-after属性会将分页符号加在指定组件后，而非之前。在下列程序中您将可以看到这些属性的设定。</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References:"></a>References:</h2><p>[1] <a href="http://edutechwiki.unige.ch/en/CSS_for_print_tutorial" target="_blank" rel="external">CSS for print tutorial</a><br>[2] <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@page" target="_blank" rel="external">@page</a><br>[3] <a href="http://www.w3school.com.cn/cssref/#print" target="_blank" rel="external">CSS 打印属性（Print）</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/07/17/CSS prin/" data-id="cj5d9bq6c000gycth2pgdql40" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/print/">print</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/07/16/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/hello-word/">hello word</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/print/">print</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/hello-word/" style="font-size: 10px;">hello word</a> <a href="/tags/print/" style="font-size: 10px;">print</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/07/17/CSS prin/">CSS print 样式</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/16/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 魏阁<br>
+      Powered by <a href="/">魏 阁</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">文章</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
