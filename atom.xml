@@ -1,88 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>魏阁的博客</title>
   
-  <title>CSS print 样式 | 魏阁的博客</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="显示器(screen)和打印机(printer)是两种差别很大的设备,所以从浏览器里看到的页面,打印出来也许和你看到的样子有很大的差距。screen一般使用逻辑单位比如px,而打印机则应该使用物理单位比如cm或in。我们常见的A4纸张大小在不同DPI的显示器上显示的大小是不同的。因此如果要精确的控制打印效果就应该使用print css，这是跨平台兼容的标准。 web打印还有一种解决方式是生成pd">
-<meta name="keywords" content="print">
-<meta property="og:type" content="article">
-<meta property="og:title" content="CSS print 样式">
-<meta property="og:url" content="http://yoursite.com/2017/07/17/CSS prin/index.html">
-<meta property="og:site_name" content="魏阁的博客">
-<meta property="og:description" content="显示器(screen)和打印机(printer)是两种差别很大的设备,所以从浏览器里看到的页面,打印出来也许和你看到的样子有很大的差距。screen一般使用逻辑单位比如px,而打印机则应该使用物理单位比如cm或in。我们常见的A4纸张大小在不同DPI的显示器上显示的大小是不同的。因此如果要精确的控制打印效果就应该使用print css，这是跨平台兼容的标准。 web打印还有一种解决方式是生成pd">
-<meta property="og:updated_time" content="2017-07-21T05:22:30.761Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CSS print 样式">
-<meta name="twitter:description" content="显示器(screen)和打印机(printer)是两种差别很大的设备,所以从浏览器里看到的页面,打印出来也许和你看到的样子有很大的差距。screen一般使用逻辑单位比如px,而打印机则应该使用物理单位比如cm或in。我们常见的A4纸张大小在不同DPI的显示器上显示的大小是不同的。因此如果要精确的控制打印效果就应该使用print css，这是跨平台兼容的标准。 web打印还有一种解决方式是生成pd">
+  <link href="/atom.xml" rel="self"/>
   
+  <link href="http://yoursite.com/"/>
+  <updated>2017-07-21T05:22:30.761Z</updated>
+  <id>http://yoursite.com/</id>
   
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
-  
-
-</head>
-
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">魏阁的博客</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">首页</a>
-        
-          <a class="main-nav-link" href="/archives">文章</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-CSS prin" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/07/17/CSS prin/" class="article-date">
-  <time datetime="2017-07-16T16:00:00.000Z" itemprop="datePublished">2017-07-17</time>
-</a>
+  <author>
+    <name>魏阁</name>
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+  </author>
   
-    <h1 class="article-title" itemprop="name">
-      CSS print 样式
-    </h1>
+  <generator uri="http://hexo.io/">Hexo</generator>
   
-
-      </header>
+  <entry>
+    <title>CSS print 样式</title>
+    <link href="http://yoursite.com/2017/07/17/CSS%20prin/"/>
+    <id>http://yoursite.com/2017/07/17/CSS prin/</id>
+    <published>2017-07-16T16:00:00.000Z</published>
+    <updated>2017-07-21T05:22:30.761Z</updated>
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
+    <content type="html"><![CDATA[<hr>
 <p>显示器(screen)和打印机(printer)是两种差别很大的设备,所以从浏览器里看到的页面,打印出来也许和你看到的样子有很大的差距。screen一般使用逻辑单位比如px,而打印机则应该使用物理单位比如cm或in。我们常见的A4纸张大小在不同DPI的显示器上显示的大小是不同的。因此如果要精确的控制打印效果就应该使用print css，这是跨平台兼容的标准。</p>
 <p>web打印还有一种解决方式是生成pdf格式文件,客户端下载来打印,这也是不错的一种打印方式,因为pdf本身就是一种打印标准,可以做到精确控制。可以使用<a href="https://parall.ax/products/jspdf" target="_blank" rel="external">jsPDF</a>在客户端动态生成pdf,也可以在服务器端使用一些组件生成pdf后传送给客户端。当然首选还是使用print css来实现打印。</p>
 <a id="more"></a>
@@ -150,118 +90,48 @@
 </ul>
 <p>其他<br>1.对于页面上有显示而不想打印的内容,可以将其display设置为none来避免打印。<br>2.需要打印的内容尽量避免float,有些浏览器不会正确的打印浮动的内容。<br>3.可以调用window.print()函数来打印当前页面。<br>4.分页打印或换页打印：page- break-before和page-break-after CSS属性并不会修改网页在屏幕上的显示，这两个属性是用来控制文件的打印方式。每个打印属性都可以设定4种设定值：auto、always、left和 right。其中Auto是默认值，只有在有需要时，才需设定分页符号 (Page breaks)。page-break-before若设定成always，则是在遇到特定的组件时，打印机会重新开始一个新的打印页。page- break-before若设定成left，则会插入分页符号，直到指定的组件出现在一个左边的空白页上。page-break-before若设定成 right，则会插入分页符号，直到指定的组件出现在一个右边的空白页上。page-break-after属性会将分页符号加在指定组件后，而非之前。在下列程序中您将可以看到这些属性的设定。</p>
 <h2 id="References"><a href="#References" class="headerlink" title="References:"></a>References:</h2><p>[1] <a href="http://edutechwiki.unige.ch/en/CSS_for_print_tutorial" target="_blank" rel="external">CSS for print tutorial</a><br>[2] <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@page" target="_blank" rel="external">@page</a><br>[3] <a href="http://www.w3school.com.cn/cssref/#print" target="_blank" rel="external">CSS 打印属性（Print）</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/07/17/CSS prin/" data-id="cj5dgax9x00035wthz8g5zunm" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/print/">print</a></li></ul>
-
-    </footer>
-  </div>
-  
+]]></content>
     
-<nav id="article-nav">
-  
-  
-    <a href="/2017/07/16/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Hello World</div>
-    </a>
-  
-</nav>
-
-  
-</article>
-
-</section>
-        
-          <aside id="sidebar">
-  
+    <summary type="html">
     
-
-  
+      &lt;hr&gt;
+&lt;p&gt;显示器(screen)和打印机(printer)是两种差别很大的设备,所以从浏览器里看到的页面,打印出来也许和你看到的样子有很大的差距。screen一般使用逻辑单位比如px,而打印机则应该使用物理单位比如cm或in。我们常见的A4纸张大小在不同DPI的显示器上显示的大小是不同的。因此如果要精确的控制打印效果就应该使用print css，这是跨平台兼容的标准。&lt;/p&gt;
+&lt;p&gt;web打印还有一种解决方式是生成pdf格式文件,客户端下载来打印,这也是不错的一种打印方式,因为pdf本身就是一种打印标准,可以做到精确控制。可以使用&lt;a href=&quot;https://parall.ax/products/jspdf&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;jsPDF&lt;/a&gt;在客户端动态生成pdf,也可以在服务器端使用一些组件生成pdf后传送给客户端。当然首选还是使用print css来实现打印。&lt;/p&gt;
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/hello-word/">hello word</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/print/">print</a></li></ul>
-    </div>
-  </div>
-
-
-  
+    </summary>
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">标签云</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/hello-word/" style="font-size: 10px;">hello word</a> <a href="/tags/print/" style="font-size: 10px;">print</a>
-    </div>
-  </div>
-
-  
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">归档</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li></ul>
-    </div>
-  </div>
-
-
-  
+      <category term="print" scheme="http://yoursite.com/tags/print/"/>
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2017/07/17/CSS prin/">CSS print 样式</a>
-          </li>
-        
-          <li>
-            <a href="/2017/07/16/hello-world/">Hello World</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
+  </entry>
   
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2017 魏阁<br>
-      Powered by <a href="/">魏 阁</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">首页</a>
-  
-    <a href="/archives" class="mobile-nav-link">文章</a>
-  
-</nav>
+  <entry>
+    <title>Hello World</title>
+    <link href="http://yoursite.com/2017/07/16/hello-world/"/>
+    <id>http://yoursite.com/2017/07/16/hello-world/</id>
+    <published>2017-07-15T16:00:00.000Z</published>
+    <updated>2017-07-21T05:22:30.690Z</updated>
     
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-<script src="/js/script.js"></script>
-
-  </div>
-</body>
-</html>
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.<br><a id="more"></a></p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;documentation&lt;/a&gt; for more info. If you get any problems when using Hexo, you can find the answer in &lt;a href=&quot;https://hexo.io/docs/troubleshooting.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;troubleshooting&lt;/a&gt; or you can ask me on &lt;a href=&quot;https://github.com/hexojs/hexo/issues&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;GitHub&lt;/a&gt;.&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="hello word" scheme="http://yoursite.com/tags/hello-word/"/>
+    
+  </entry>
+  
+</feed>
