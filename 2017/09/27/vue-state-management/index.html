@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>vue 状态管理的一点思考 | 魏阁的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近在写项目的时候碰到一个场景：一个地图应用，有个侧边栏，侧边栏里面放着很多选项，选项改变的时候，应用会根据侧边栏的条件请求数据，然后在地图上放 markers 。">
+<meta name="keywords" content="vue">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vue 状态管理的一点思考">
+<meta property="og:url" content="http://yoursite.com/2017/09/27/vue-state-management/index.html">
+<meta property="og:site_name" content="魏阁的博客">
+<meta property="og:description" content="最近在写项目的时候碰到一个场景：一个地图应用，有个侧边栏，侧边栏里面放着很多选项，选项改变的时候，应用会根据侧边栏的条件请求数据，然后在地图上放 markers 。">
+<meta property="og:updated_time" content="2017-09-27T06:45:07.640Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="vue 状态管理的一点思考">
+<meta name="twitter:description" content="最近在写项目的时候碰到一个场景：一个地图应用，有个侧边栏，侧边栏里面放着很多选项，选项改变的时候，应用会根据侧边栏的条件请求数据，然后在地图上放 markers 。">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">魏阁的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">文章</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-vue-state-management" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/27/vue-state-management/" class="article-date">
+  <time datetime="2017-09-26T16:00:00.000Z" itemprop="datePublished">2017-09-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      vue 状态管理的一点思考
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>最近在写项目的时候碰到一个场景：一个地图应用，有个侧边栏，侧边栏里面放着很多选项，选项改变的时候，应用会根据侧边栏的条件请求数据，然后在地图上放 markers 。</p>
+<a id="more"></a>
+<p>页面可以简单抽象成如下结构：<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// App.vue</div><div class="line"></div><div class="line">&lt;div&gt;</div><div class="line">  &lt;sidebar&gt;&lt;/sidebar&gt;</div><div class="line">  &lt;map&gt;&lt;/map&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure></p>
+<p>有很多种方式可以来完成上面的需求，我先介绍 2 种常见的做法，最后再给出一个比较另类但很有趣的方案。</p>
+<h2 id="1-直接上-vuex"><a href="#1-直接上-vuex" class="headerlink" title="1.直接上 vuex"></a>1.直接上 vuex</h2><p>通常来讲，有多个组件共享状态的时候，把共享的状态丢给 vuex 来处理是个不错的方案。但是在处理上面那个场景的时候，会显示的有点「笨重」，因为侧边栏实际上是一个表单，<strong>如果使用 vuex 的话，就需要为每个选项定义一套 mutation，失去了直接使用 v-model 的便利</strong>。</p>
+<p>直接使用组件状态绑定一个选项</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// sidebar.vue</div><div class="line"></div><div class="line">&lt;input v-model=<span class="string">"message"</span>&gt;</div><div class="line">// ...</div><div class="line">data () &#123;</div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    message: <span class="string">''</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当使用 vuex 绑定一个选项时，多了不少「模板」代码</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">// 定义 state, mutation</div><div class="line"></div><div class="line">state: &#123;</div><div class="line">  message: ''</div><div class="line">&#125;,</div><div class="line">mutations: &#123;</div><div class="line">  updateMessage (state, message) &#123;</div><div class="line">    state.message = message</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// sidebar.vue</div><div class="line"></div><div class="line">&lt;input :value="message" @input="updateMessage"&gt;</div><div class="line">// ...</div><div class="line">computed: &#123;</div><div class="line">  ...mapState(&#123;</div><div class="line">    message: state =&gt; state.message</div><div class="line">  &#125;)</div><div class="line">&#125;,</div><div class="line">methods: &#123;</div><div class="line">  updateMessage (e) &#123;</div><div class="line">    this.$store.commit('updateMessage', e.target.value)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="2-将状态放到父组件上"><a href="#2-将状态放到父组件上" class="headerlink" title="2.将状态放到父组件上"></a>2.将状态放到父组件上</h2><p>如果 sidebar 和 map 有一个共同的父级，使用这种方式处理起来会比上面的简单很多。但是当我们的应用越来越大的时候，往往会把 sidebar 和 map 拆成颗粒度更小的组件，那么通过 props 一层层传给子组件也会变的非常麻烦。</p>
+<h2 id="3-将组件状态「共享」出来"><a href="#3-将组件状态「共享」出来" class="headerlink" title="3.将组件状态「共享」出来"></a>3.将组件状态「共享」出来</h2><p>我们通常把组件内的状态写成下面这种形式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// ...</div><div class="line">data () &#123;</div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">     message: <span class="string">''</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>实际上，我们可以把 data () {} 中返回的对象单独提取到外面，作为一个变量，像下面这种写法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">const state = &#123; message: <span class="string">''</span> &#125;</div><div class="line">// ...</div><div class="line">data () &#123;</div><div class="line">  <span class="keyword">return</span> state</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>那么在这个组件初始化过程中，state 对象会被 vue 「响应式化」，这会引出一个有趣的事情：任何组件，只要模版中使用了 state.message ，当 state.message 改变时，页面都会被同步更新</strong>。</p>
+<p>知道了这个之后，我们就可以将侧边栏的状态写成一个独立的文件，作为一个模块引入其他组件中，结构如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">// state.js</div><div class="line">export default &#123; message: '' &#125;</div><div class="line"></div><div class="line"></div><div class="line">// sidebar.vue</div><div class="line">&lt;input v-model="state.message" /&gt;</div><div class="line"></div><div class="line">import state from 'path/to/state.js'</div><div class="line">// ...</div><div class="line">data () &#123;</div><div class="line">  return &#123; state &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">// map.vue</div><div class="line">// 在模版中使用侧边栏的状态</div><div class="line">&lt;div&gt;&#123;&#123; state.message &#125;&#125;&lt;/div&gt;</div><div class="line"></div><div class="line">import state from 'path/to/state.js'</div><div class="line">// ...</div><div class="line">data () &#123;</div><div class="line">  return &#123; state &#125;</div><div class="line">&#125;,</div><div class="line">created () &#123;</div><div class="line">  // 将侧边栏的状态作为参数去请求数据</div><div class="line">  axios.get('/xxxx', &#123; params: state &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样做的一个好处是，既可以在 sidebar.vue 中把 state 当作「内部」状态，愉快的使用 v-model 绑定数据，map.vue 中也可以方便的拿到 state 做为参数请求，同时还可以直接在 map.vue 的模版中使用 <code>state.message</code>。</p>
+<h4 id="更进一步"><a href="#更进一步" class="headerlink" title="更进一步"></a>更进一步</h4><p>上面的方案中，state「响应式化」是发生在子组件初始化的过程中，我希望能在应用开始的时候，主动在某个时刻完成这一步。这个时候就可以借助 Vue 构造函数，像下面这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// store.js</div><div class="line"></div><div class="line"><span class="keyword">import</span> state <span class="keyword">from</span> <span class="string">'path/to/state.js'</span></div><div class="line"></div><div class="line">new Vue(&#123;</div><div class="line">  data: &#123;</div><div class="line">    state</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>然后在主文件 main.js 中引入 store.js，state 就会被「响应式化」。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文阐述了在这个特定场景下，对于如何管理侧边栏状态的一些思考，希望大家看完后有所收获 :)</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/09/27/vue-state-management/" data-id="cj82o93t00001fkthk6k7pi78" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/vue/">vue</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/07/17/CSS prin/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CSS print 样式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/hello-word/">hello word</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/print/">print</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/hello-word/" style="font-size: 10px;">hello word</a> <a href="/tags/print/" style="font-size: 10px;">print</a> <a href="/tags/vue/" style="font-size: 10px;">vue</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/09/27/vue-state-management/">vue 状态管理的一点思考</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/17/CSS prin/">CSS print 样式</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/16/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 魏阁<br>
+      Powered by <a href="/">魏 阁</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">文章</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
