@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>深入浏览器渲染原理(一) — 浏览器渲染DOM过程 | 魏阁的博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="当访问一个网站的时候需要加载html，一个完整的html结构包含：dom树、文档、图片和媒体资源、样式css资源和脚本js资源。然后我们提出一个疑问:浏览器是如何加载（渲染）html的？">
+<meta name="keywords" content="DOM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入浏览器渲染原理(一) — 浏览器渲染DOM过程">
+<meta property="og:url" content="http://yoursite.com/2017/09/27/browser-rendering/index.html">
+<meta property="og:site_name" content="魏阁的博客">
+<meta property="og:description" content="当访问一个网站的时候需要加载html，一个完整的html结构包含：dom树、文档、图片和媒体资源、样式css资源和脚本js资源。然后我们提出一个疑问:浏览器是如何加载（渲染）html的？">
+<meta property="og:updated_time" content="2017-09-27T07:38:14.181Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入浏览器渲染原理(一) — 浏览器渲染DOM过程">
+<meta name="twitter:description" content="当访问一个网站的时候需要加载html，一个完整的html结构包含：dom树、文档、图片和媒体资源、样式css资源和脚本js资源。然后我们提出一个疑问:浏览器是如何加载（渲染）html的？">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">魏阁的博客</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">文章</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-browser-rendering" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/27/browser-rendering/" class="article-date">
+  <time datetime="2017-09-26T16:00:00.000Z" itemprop="datePublished">2017-09-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      深入浏览器渲染原理(一) — 浏览器渲染DOM过程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>当访问一个网站的时候需要加载html，一个完整的html结构包含：dom树、文档、图片和媒体资源、样式css资源和脚本js资源。然后我们提出一个疑问:浏览器是如何加载（渲染）html的？</p>
+<a id="more"></a>
+<p>先看下面的html代码在渲染的时候弹出的是什么？并且注意图片是什么时候出来的？<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang="en"&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset="UTF-8"&gt;</div><div class="line">    &lt;title&gt;Document&lt;/title&gt;</div><div class="line">    &lt;script src="js/jquery.min.js"&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    var box1 = document.getElementById('box')</div><div class="line">    alert("第一次alert：" + box1)</div><div class="line">    window.onload = function()&#123;</div><div class="line">        var box2 = document.getElementById('box')</div><div class="line">        alert("第二次alert：" + box2)</div><div class="line">    &#125;</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">    &lt;div id="box"&gt;</div><div class="line">        &lt;h1&gt;测试代码&lt;/h1&gt;</div><div class="line">        &lt;img src="img/logo.png" alt=""&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    var box3 = document.getElementById('box')</div><div class="line">    alert("第三次alert：" + box3)</div><div class="line">    document.addEventListener('DOMContentLoaded', function()&#123;</div><div class="line">        var box4 = document.getElementById('box')</div><div class="line">        alert("第四次alert：" + box4)</div><div class="line">    &#125;, false)</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// 弹出的顺序为</div><div class="line">第一次alert：null</div><div class="line">第三次alert：[object HTMLDivElement]</div><div class="line">第四次alert：[object HTMLDivElement]</div><div class="line">第二次alert：[object HTMLDivElement]</div></pre></td></tr></table></figure>
+<p>在第一次打开浏览器的时候，如果你注意的话，首先会弹出1、3，之后出现图片和弹出4，最后弹出2。如果你对浏览器的渲染不了解的话，看到这样的结果你也许会很纳闷，下面我就带大家来看看上面我们提到的三个问题。</p>
+<h2 id="浏览器是如何加载（渲染）html的？"><a href="#浏览器是如何加载（渲染）html的？" class="headerlink" title="浏览器是如何加载（渲染）html的？"></a>浏览器是如何加载（渲染）html的？</h2><p>浏览器在加载html的时候是自上而下渲染的，具体的步骤如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">(<span class="number">1</span>) 解析HTML结构。</div><div class="line">(<span class="number">2</span>) 加载外部脚本和样式表文件。</div><div class="line">(<span class="number">3</span>) 解析并执行脚本代码。</div><div class="line">(<span class="number">4</span>) 构造HTML DOM模型。//js:DOMContentLoaded; jq:ready</div><div class="line">(<span class="number">5</span>) 加载图片等外部文件。</div><div class="line">(<span class="number">6</span>) 页面加载完毕。//js:onload; jq:load</div></pre></td></tr></table></figure>
+<p>弹出1、3可以看出来来是自上而下的，第一次弹出的是null说明DOM还没渲染完成，找不到对应的标签。第三次能正常弹出是DOM对象，说明DOM树已经加载完可以找到对应的标签。第二次和第四次是添加了一些事件，在DOM渲染的过程触发对应的事件执行。从弹出的内容和先后顺序可以看出 DOMContentLoaded 是在DOM结构加载完毕触发的。之后出现了图片，最后弹出第二个，说明 onload 是页面资源（包括图像、脚本文件、CSS 文件等）加载完毕才弹出的。通过这样一个小例子彻底的掌握了浏览器加载html的全过程。jquery 中的ready和load的的实现也是通过封装 DOMContentLoaded和onload 来实现的他做了一层兼容处理。</p>
+<p>事件DOMContentLoaded和load的区别：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">DOMContentLoaded 是在DOM结构加载完毕触发的；</div><div class="line">load 是页面资源（包括图像、脚本文件、CSS 文件等）加载完毕才弹出的</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/09/27/browser-rendering/" data-id="cj82pykpb0001d4thxj0sx1fr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DOM/">DOM</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/09/27/vue-state-management/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">vue 状态管理的一点思考</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DOM/">DOM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hello-word/">hello word</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/print/">print</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vue/">vue</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/DOM/" style="font-size: 10px;">DOM</a> <a href="/tags/hello-word/" style="font-size: 10px;">hello word</a> <a href="/tags/print/" style="font-size: 10px;">print</a> <a href="/tags/vue/" style="font-size: 10px;">vue</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">七月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/09/27/browser-rendering/">深入浏览器渲染原理(一) — 浏览器渲染DOM过程</a>
+          </li>
+        
+          <li>
+            <a href="/2017/09/27/vue-state-management/">vue 状态管理的一点思考</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/17/CSS prin/">CSS print 样式</a>
+          </li>
+        
+          <li>
+            <a href="/2017/07/16/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 魏阁<br>
+      Powered by <a href="/">魏 阁</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">文章</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
