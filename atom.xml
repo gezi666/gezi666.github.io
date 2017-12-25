@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-12-25T10:19:19.734Z</updated>
+  <updated>2017-12-25T10:22:16.277Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://yoursite.com/2017/12/25/handlebars/"/>
     <id>http://yoursite.com/2017/12/25/handlebars/</id>
     <published>2017-12-24T16:00:00.000Z</published>
-    <updated>2017-12-25T10:19:19.734Z</updated>
+    <updated>2017-12-25T10:22:16.277Z</updated>
     
     <content type="html"><![CDATA[<hr>
 <p>Handlebars.js模板引擎是我们常用到的模板引擎，它是 JavaScript 一个语义模板库，通过对view和data的分离来快速构建web模板。它采用”Logic-less template”（无逻辑模版）的思路，在加载时被预编译，而不是到了客户端执行到代码时再去编译，这样可以保证模板加载和运行的速度。Handlebars兼容Mustache，你可以在Handlebars中导入Mustache模板。<br>本文对它的一些实用方法做了一些简单的总结，希望你在这里可以找到想用的方法。</p>
@@ -89,7 +89,7 @@
     </summary>
     
     
-      <category term="模板引擎,Handlebars" scheme="http://yoursite.com/tags/%E6%A8%A1%E6%9D%BF%E5%BC%95%E6%93%8E-Handlebars/"/>
+      <category term="Handlebars" scheme="http://yoursite.com/tags/Handlebars/"/>
     
   </entry>
   
