@@ -94,6 +94,38 @@
   </entry>
   
   <entry>
+    <title>深入浏览器渲染原理(一) — 浏览器渲染DOM过程</title>
+    <link href="http://yoursite.com/2017/09/27/browser-rendering/"/>
+    <id>http://yoursite.com/2017/09/27/browser-rendering/</id>
+    <published>2017-09-26T16:00:00.000Z</published>
+    <updated>2017-09-27T07:38:14.181Z</updated>
+    
+    <content type="html"><![CDATA[<hr>
+<p>当访问一个网站的时候需要加载html，一个完整的html结构包含：dom树、文档、图片和媒体资源、样式css资源和脚本js资源。然后我们提出一个疑问:浏览器是如何加载（渲染）html的？</p>
+<a id="more"></a>
+<p>先看下面的html代码在渲染的时候弹出的是什么？并且注意图片是什么时候出来的？<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang="en"&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset="UTF-8"&gt;</div><div class="line">    &lt;title&gt;Document&lt;/title&gt;</div><div class="line">    &lt;script src="js/jquery.min.js"&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    var box1 = document.getElementById('box')</div><div class="line">    alert("第一次alert：" + box1)</div><div class="line">    window.onload = function()&#123;</div><div class="line">        var box2 = document.getElementById('box')</div><div class="line">        alert("第二次alert：" + box2)</div><div class="line">    &#125;</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">    &lt;div id="box"&gt;</div><div class="line">        &lt;h1&gt;测试代码&lt;/h1&gt;</div><div class="line">        &lt;img src="img/logo.png" alt=""&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    var box3 = document.getElementById('box')</div><div class="line">    alert("第三次alert：" + box3)</div><div class="line">    document.addEventListener('DOMContentLoaded', function()&#123;</div><div class="line">        var box4 = document.getElementById('box')</div><div class="line">        alert("第四次alert：" + box4)</div><div class="line">    &#125;, false)</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// 弹出的顺序为</div><div class="line">第一次alert：null</div><div class="line">第三次alert：[object HTMLDivElement]</div><div class="line">第四次alert：[object HTMLDivElement]</div><div class="line">第二次alert：[object HTMLDivElement]</div></pre></td></tr></table></figure>
+<p>在第一次打开浏览器的时候，如果你注意的话，首先会弹出1、3，之后出现图片和弹出4，最后弹出2。如果你对浏览器的渲染不了解的话，看到这样的结果你也许会很纳闷，下面我就带大家来看看上面我们提到的三个问题。</p>
+<h2 id="浏览器是如何加载（渲染）html的？"><a href="#浏览器是如何加载（渲染）html的？" class="headerlink" title="浏览器是如何加载（渲染）html的？"></a>浏览器是如何加载（渲染）html的？</h2><p>浏览器在加载html的时候是自上而下渲染的，具体的步骤如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">(<span class="number">1</span>) 解析HTML结构。</div><div class="line">(<span class="number">2</span>) 加载外部脚本和样式表文件。</div><div class="line">(<span class="number">3</span>) 解析并执行脚本代码。</div><div class="line">(<span class="number">4</span>) 构造HTML DOM模型。//js:DOMContentLoaded; jq:ready</div><div class="line">(<span class="number">5</span>) 加载图片等外部文件。</div><div class="line">(<span class="number">6</span>) 页面加载完毕。//js:onload; jq:load</div></pre></td></tr></table></figure>
+<p>弹出1、3可以看出来来是自上而下的，第一次弹出的是null说明DOM还没渲染完成，找不到对应的标签。第三次能正常弹出是DOM对象，说明DOM树已经加载完可以找到对应的标签。第二次和第四次是添加了一些事件，在DOM渲染的过程触发对应的事件执行。从弹出的内容和先后顺序可以看出 DOMContentLoaded 是在DOM结构加载完毕触发的。之后出现了图片，最后弹出第二个，说明 onload 是页面资源（包括图像、脚本文件、CSS 文件等）加载完毕才弹出的。通过这样一个小例子彻底的掌握了浏览器加载html的全过程。jquery 中的ready和load的的实现也是通过封装 DOMContentLoaded和onload 来实现的他做了一层兼容处理。</p>
+<p>事件DOMContentLoaded和load的区别：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">DOMContentLoaded 是在DOM结构加载完毕触发的；</div><div class="line">load 是页面资源（包括图像、脚本文件、CSS 文件等）加载完毕才弹出的</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;hr&gt;
+&lt;p&gt;当访问一个网站的时候需要加载html，一个完整的html结构包含：dom树、文档、图片和媒体资源、样式css资源和脚本js资源。然后我们提出一个疑问:浏览器是如何加载（渲染）html的？&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="DOM" scheme="http://yoursite.com/tags/DOM/"/>
+    
+  </entry>
+  
+  <entry>
     <title>vue 状态管理的一点思考</title>
     <link href="http://yoursite.com/2017/09/27/vue-state-management/"/>
     <id>http://yoursite.com/2017/09/27/vue-state-management/</id>
@@ -134,38 +166,6 @@
     
     
       <category term="vue" scheme="http://yoursite.com/tags/vue/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>深入浏览器渲染原理(一) — 浏览器渲染DOM过程</title>
-    <link href="http://yoursite.com/2017/09/27/browser-rendering/"/>
-    <id>http://yoursite.com/2017/09/27/browser-rendering/</id>
-    <published>2017-09-26T16:00:00.000Z</published>
-    <updated>2017-09-27T07:38:14.181Z</updated>
-    
-    <content type="html"><![CDATA[<hr>
-<p>当访问一个网站的时候需要加载html，一个完整的html结构包含：dom树、文档、图片和媒体资源、样式css资源和脚本js资源。然后我们提出一个疑问:浏览器是如何加载（渲染）html的？</p>
-<a id="more"></a>
-<p>先看下面的html代码在渲染的时候弹出的是什么？并且注意图片是什么时候出来的？<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang="en"&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset="UTF-8"&gt;</div><div class="line">    &lt;title&gt;Document&lt;/title&gt;</div><div class="line">    &lt;script src="js/jquery.min.js"&gt;&lt;/script&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    var box1 = document.getElementById('box')</div><div class="line">    alert("第一次alert：" + box1)</div><div class="line">    window.onload = function()&#123;</div><div class="line">        var box2 = document.getElementById('box')</div><div class="line">        alert("第二次alert：" + box2)</div><div class="line">    &#125;</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">    &lt;div id="box"&gt;</div><div class="line">        &lt;h1&gt;测试代码&lt;/h1&gt;</div><div class="line">        &lt;img src="img/logo.png" alt=""&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;script&gt;</div><div class="line">    var box3 = document.getElementById('box')</div><div class="line">    alert("第三次alert：" + box3)</div><div class="line">    document.addEventListener('DOMContentLoaded', function()&#123;</div><div class="line">        var box4 = document.getElementById('box')</div><div class="line">        alert("第四次alert：" + box4)</div><div class="line">    &#125;, false)</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// 弹出的顺序为</div><div class="line">第一次alert：null</div><div class="line">第三次alert：[object HTMLDivElement]</div><div class="line">第四次alert：[object HTMLDivElement]</div><div class="line">第二次alert：[object HTMLDivElement]</div></pre></td></tr></table></figure>
-<p>在第一次打开浏览器的时候，如果你注意的话，首先会弹出1、3，之后出现图片和弹出4，最后弹出2。如果你对浏览器的渲染不了解的话，看到这样的结果你也许会很纳闷，下面我就带大家来看看上面我们提到的三个问题。</p>
-<h2 id="浏览器是如何加载（渲染）html的？"><a href="#浏览器是如何加载（渲染）html的？" class="headerlink" title="浏览器是如何加载（渲染）html的？"></a>浏览器是如何加载（渲染）html的？</h2><p>浏览器在加载html的时候是自上而下渲染的，具体的步骤如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">(<span class="number">1</span>) 解析HTML结构。</div><div class="line">(<span class="number">2</span>) 加载外部脚本和样式表文件。</div><div class="line">(<span class="number">3</span>) 解析并执行脚本代码。</div><div class="line">(<span class="number">4</span>) 构造HTML DOM模型。//js:DOMContentLoaded; jq:ready</div><div class="line">(<span class="number">5</span>) 加载图片等外部文件。</div><div class="line">(<span class="number">6</span>) 页面加载完毕。//js:onload; jq:load</div></pre></td></tr></table></figure>
-<p>弹出1、3可以看出来来是自上而下的，第一次弹出的是null说明DOM还没渲染完成，找不到对应的标签。第三次能正常弹出是DOM对象，说明DOM树已经加载完可以找到对应的标签。第二次和第四次是添加了一些事件，在DOM渲染的过程触发对应的事件执行。从弹出的内容和先后顺序可以看出 DOMContentLoaded 是在DOM结构加载完毕触发的。之后出现了图片，最后弹出第二个，说明 onload 是页面资源（包括图像、脚本文件、CSS 文件等）加载完毕才弹出的。通过这样一个小例子彻底的掌握了浏览器加载html的全过程。jquery 中的ready和load的的实现也是通过封装 DOMContentLoaded和onload 来实现的他做了一层兼容处理。</p>
-<p>事件DOMContentLoaded和load的区别：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">DOMContentLoaded 是在DOM结构加载完毕触发的；</div><div class="line">load 是页面资源（包括图像、脚本文件、CSS 文件等）加载完毕才弹出的</div></pre></td></tr></table></figure>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;hr&gt;
-&lt;p&gt;当访问一个网站的时候需要加载html，一个完整的html结构包含：dom树、文档、图片和媒体资源、样式css资源和脚本js资源。然后我们提出一个疑问:浏览器是如何加载（渲染）html的？&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="DOM" scheme="http://yoursite.com/tags/DOM/"/>
     
   </entry>
   
